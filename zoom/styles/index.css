@@ -1,0 +1,20 @@
+.grid{
+    display: grid;
+    grid-template-columns: repeat(4, 0px);
+    grid-template-rows: repeat(4, 0px);
+    gap:100px;
+    margin: 15%;
+  }
+  
+.el{
+  border-radius: 50%;
+  width:80px;
+  height: 80px;
+  background-color: #f85a5a;
+  margin: auto;
+  padding: auto;
+  
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}

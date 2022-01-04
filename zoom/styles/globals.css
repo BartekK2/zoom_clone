@@ -1,0 +1,6 @@
+
+body{
+  /* remove scrollbar from width */
+  width: calc(100vw - (100vw - 100%));
+}
+
