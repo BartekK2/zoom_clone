@@ -1,7 +1,6 @@
 // Others
 import React, { useEffect, useState } from 'react'
 import anime from 'animejs';
-import Link from 'next/link'
 
 // STYLE
 import styled from '@emotion/styled'
@@ -10,7 +9,6 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 
 //ICONS
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import SkateboardingIcon from '@mui/icons-material/Skateboarding';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
@@ -22,11 +20,6 @@ import CalculateIcon from '@mui/icons-material/Calculate';
 import SportsTennisIcon from '@mui/icons-material/SportsTennis';
 import SportsVolleyballIcon from '@mui/icons-material/SportsVolleyball';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import InfoIcon from '@mui/icons-material/Info';
-import LoginIcon from '@mui/icons-material/Login';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
-import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 
 // RESPONSIVNES
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -60,43 +53,8 @@ function Main() {
 
   return (
     <>
-      <div style={{ display: "flex", zIndex: 1000, fontSize: "150%", alignItems: "center", gap: "30px", position: "absolute", top: 0, left: 0, width: "100%", padding: "25px" }}>
-        <EmojiPeopleIcon sx={{ fontSize: "150%" }} />
-        {
-          isPhone ?
-            <>
-              <Link href={'/about'} passHref>
-                <a href="" style={{ textDecoration: "none", color: "black" }}>About</a>
-              </Link>
-              <Link href={'/contact'} passHref>
-                <a href="" style={{ textDecoration: "none", color: "black" }}>Contact</a>
-              </Link>
-              <Link href={'/support'} passHref>
-                <a href="" style={{ textDecoration: "none", color: "black" }}>Support</a>
-              </Link>
-            </> :
-            <ButtonGroup variant="contained" >
-              <Link href={'/about'}>
-                <Button onClick={() => { console.log("XD") }}><InfoIcon /></Button>
-              </Link>
-              <Link href={'/contact'}>
-                <Button><ContactPhoneIcon /></Button>
-              </Link>
-              <Link href={'/support'}>
-                <Button><VolunteerActivismIcon /></Button>
-              </Link>
-            </ButtonGroup>
-
-        }
-        <div style={{ marginLeft: "auto", display: "flex", gap: "10px" }}>
-          <Button variant="contained" sx={{ flexBasis: "100%" }}>{isPhone ? "Login" : <LoginIcon />}</Button>
-          <Button variant="contained" sx={{ flexBasis: "100%" }}>{isPhone ? "Register" : <AccountBoxIcon />}</Button>
-        </div>
-      </div>
-
-
-      <div style={{ display: "flex", alignItems: "stretch", flexDirection: isPhone ? "row" : "column" }} >
-        <div style={{ width: isPhone ? "40%" : "100%", "marginTop": "auto", "display": "flex", "padding": "70px", "paddingBottom": "40px", "height": "100vh", "flexDirection": "column", "justifyContent": "flex-end" }}>
+      <div style={{ display: "flex", alignItems: "stretch", flexDirection: isPhone ? "row" : "column", flex: '1 1 auto' }} >
+        <div style={{ width: isPhone ? "40%" : "100%", "marginTop": "auto", "display": "flex", "padding": "70px", "paddingBottom": "40px", "flexDirection": "column", "justifyContent": "flex-end" }}>
           <h1 style={{ fontSize: "350%", fontWeight: "bold", lineHeight: "70px" }}>
             Desktop video call app.
           </h1>

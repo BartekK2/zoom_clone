@@ -10,6 +10,25 @@ const theme = createTheme({
             main: '#edf2ff',
         },
     },
+    components: {
+        MuiChip: {
+            styleOverrides: {
+                root: {
+                    "&:hover": {
+                        cursor: "pointer",
+                    },
+                    " > *": {
+                        width: "100%",
+                    },
+                    padding: "0 20px",
+
+                },
+                label: {
+                    textAlign: 'center',
+                },
+            },
+        },
+    },
 });
 
 function ThemeContext({ children }) {

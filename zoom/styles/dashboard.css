@@ -1,0 +1,13 @@
+.rooms_tab{
+    display:flex;
+    flex-flow:column;
+    align-items:center;
+    width: 30%;
+    background: #aaaaaa;
+    padding: 20px;
+    gap: 20px;
+}
+
+.rooms_tab > *{
+    width: 80%;
+}
