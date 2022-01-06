@@ -9,7 +9,7 @@ import {
     GithubAuthProvider
 
 } from "firebase/auth";
-import { collection, getDocs, query, where, addDoc } from "firebase/firestore";
+import { collection, getDocs, getDoc, query, where, addDoc } from "firebase/firestore";
 
 
 import { db } from "./firebaseSetup";
@@ -85,6 +85,7 @@ export function AuthProvider({ children }) {
             name: _name,
             secured: is_secured,
             password: pass,
+            room_members: [],
         });
     }
 

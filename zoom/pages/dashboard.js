@@ -23,8 +23,10 @@ function dashboard() {
     }, [currentUser])
 
     const updateRooms = async () => {
-        let x = await getRooms(currentUser.uid);
-        setrooms(x);
+        if (currentUser) {
+            let x = await getRooms(currentUser.uid);
+            setrooms(x);
+        }
     }
 
     useEffect(() => {
@@ -47,7 +49,7 @@ function dashboard() {
                     </div>
 
                     {/* create rooms or room*/}
-                    <div style={{ width: "70%", display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: "-webkit-fill-available", display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', justifyContent: 'center' }}>
                         <TextField required label="Name" onChange={(e) => setname(e.target.value)} />
                         {secured && <TextField required label="Password" onChange={(e) => setpassword(e.target.value)} />}
                         <FormControlLabel
@@ -61,6 +63,15 @@ function dashboard() {
                             await addRoom(e, currentUser.uid, name, secured, password);
                             updateRooms();
                         }}>Add +</Button>
+                        funkcja ktora sprawdza czy hasla sa ok i przypisuje uzytkownika do roomu
+
+                        funkcja ktora pobiera pokoje
+
+                        funkcja ktora generuje jednorazowy hash przy tworzeniu video chatu
+
+                        funkcja ktora sprawdza czy uzytkownik jest w pokoju i zwraca mu hash jesli istnieje
+
+                        kiedy sie wszyscy rozlacza hash=""
                     </div>
 
                 </div>

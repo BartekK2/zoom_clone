@@ -30,7 +30,7 @@ function Navbar() {
     const { currentUser, logout } = useAuth();
 
     return (
-        <div style={{ display: "flex", flex: '0 1 auto', zIndex: 1000, fontSize: "150%", alignItems: "center", gap: "30px", width: "100%", padding: "25px" }}>
+        <div style={{ display: "flex", flex: '0 1 auto', zIndex: 1000, fontSize: "150%", alignItems: "center", gap: "30px", width: "100%", padding: "25px", borderBottom: "solid 1px black" }}>
             <EmojiPeopleIcon sx={{ fontSize: "150%" }} />
             {
                 isPhone ?

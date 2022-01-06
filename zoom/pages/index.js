@@ -5,7 +5,7 @@ import anime from 'animejs';
 // STYLE
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
-import ButtonGroup from '@mui/material/ButtonGroup';
+import Link from 'next/link'
 
 //ICONS
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -62,20 +62,21 @@ function Main() {
             Zoom like video call app. Made just for fun and portfolio, try it if u want but i dont recommend to use it as a replacement for apps like teams or sth.
           </h4>
 
-          <HoverArea>
+          <Link href="/dashboard">
+            <HoverArea>
 
-            <Button color="primary" variant="contained" style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: "10px",
-            }}>
-              Let&apos;s start
-              <ArrowForwardIcon />
-            </Button>
+              <Button color="primary" variant="contained" style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: "10px",
+              }}>
+                Let&apos;s start
+                <ArrowForwardIcon />
+              </Button>
 
-          </HoverArea>
-
+            </HoverArea>
+          </Link>
 
         </div>
 
