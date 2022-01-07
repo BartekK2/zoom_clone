@@ -10,9 +10,8 @@ import {
 
 } from "firebase/auth";
 import { collection, getDocs, getDoc, query, where, addDoc } from "firebase/firestore";
-
-
 import { db } from "./firebaseSetup";
+import fetch from 'node-fetch';
 
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
@@ -66,27 +65,35 @@ export function AuthProvider({ children }) {
 
     const roomsRef = collection(db, "rooms");
 
+    async function passwordCheck(uid, id, password) {
+        await fetch('https://europe-central2-test-36302.cloudfunctions.net/passwordCheck', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "uid": uid, "id": id, "password": password })
+        })
+    }
 
     async function getRooms(uid) {
-        const q = query(roomsRef, where("creator_uid", "==", uid));
-        const rooms = await getDocs(q);
-        let returned_rooms = [];
-        rooms.forEach(element => {
-            returned_rooms.push(element.data());
-        });
-        console.log(returned_rooms);
-        return returned_rooms;
+        let rooms;
+        await fetch('https://europe-central2-test-36302.cloudfunctions.net/rooms', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "uid": uid })
+        }).then(response => response.json())
+            .then(data => { rooms = data });;
+        return rooms;
     }
-    async function addRoom(e, uid, _name, is_secured, pass) {
-        e.preventDefault()
-
+    async function addRoom(uid, _name, is_secured, pass) {
         await addDoc(collection(db, "rooms"), {
             creator_uid: uid,
             name: _name,
             secured: is_secured,
             password: pass,
-            room_members: [],
-        });
+        }).then(async (doc) => await passwordCheck(uid, doc.id, pass));
     }
 
     useEffect(() => {
@@ -108,8 +115,6 @@ export function AuthProvider({ children }) {
         logout,
         getRooms,
         addRoom,
-
-
         setAuthPersistence,
         getPersistence,
         googleSignInWithPopUp,

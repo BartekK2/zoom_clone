@@ -7,11 +7,26 @@ import RoomTab from './components/RoomTab';
 function dashboard() {
     const { currentUser, getRooms, addRoom } = useAuth();
     const [loading, setloading] = useState(false);
+    const [roomsLoading, setroomsLoading] = useState(true)
+    const [addloading, setAddLoading] = useState(false);
     const router = useRouter();
     const [password, setpassword] = useState("");
     const [secured, setsecured] = useState(false)
     const [name, setname] = useState("")
     const [rooms, setrooms] = useState([])
+
+    const updateRooms = async () => {
+        setroomsLoading(true);
+        setrooms(await getRooms(currentUser.uid));
+        console.log(rooms)
+        setroomsLoading(false);
+    }
+
+    const createRoom = async () => {
+        setAddLoading(true);
+        await addRoom(currentUser.uid, name, secured, password);
+        setAddLoading(false);
+    }
 
     useEffect(() => {
         if (!currentUser) {
@@ -22,16 +37,9 @@ function dashboard() {
         }
     }, [currentUser])
 
-    const updateRooms = async () => {
-        if (currentUser) {
-            let x = await getRooms(currentUser.uid);
-            setrooms(x);
-        }
-    }
-
-    useEffect(() => {
-        updateRooms();
-    }, [currentUser])
+    useEffect(async () => {
+        await updateRooms();
+    }, [])
 
     return (
         <>
@@ -42,13 +50,16 @@ function dashboard() {
 
                         <Button variant='contained'>Create room +</Button>
                         <Button variant='contained'>Join room</Button>
-
-                        {rooms.map((element, id) => {
-                            return (<RoomTab props={element} id={id}>{element.name}</RoomTab>)
-                        })}
+                        {roomsLoading ?
+                            <p style={{ textAlign: "center" }}>Ładowanie</p>
+                            :
+                            rooms.map((element, id) => {
+                                return (<RoomTab props={element} id={id}>{element.name}</RoomTab>)
+                            })
+                        }
                     </div>
 
-                    {/* create rooms or room*/}
+                    {/* create room*/}
                     <div style={{ width: "-webkit-fill-available", display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', justifyContent: 'center' }}>
                         <TextField required label="Name" onChange={(e) => setname(e.target.value)} />
                         {secured && <TextField required label="Password" onChange={(e) => setpassword(e.target.value)} />}
@@ -60,9 +71,12 @@ function dashboard() {
                             labelPlacement="top"
                         />
                         <Button variant="contained" onClick={async (e) => {
-                            await addRoom(e, currentUser.uid, name, secured, password);
-                            updateRooms();
+                            e.preventDefault();
+                            await createRoom();
+                            await updateRooms();
                         }}>Add +</Button>
+                        {addloading && <p>Ładowanie</p>}
+
                         funkcja ktora sprawdza czy hasla sa ok i przypisuje uzytkownika do roomu
 
                         funkcja ktora pobiera pokoje

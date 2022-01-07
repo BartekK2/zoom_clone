@@ -1,79 +1,97 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const cors = require('cors')({ origin: true });
 
 admin.initializeApp(functions.config().firebase);
 
-exports.passwordCheck = functions.https.onRequest((req, res) => {
-    const { uid, name, password } = req.body;
+exports.passwordCheck = functions.region("europe-central2").https.onRequest((req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    const { uid, password, id } = req.body;
 
     // refs to room with given args
-    const nameRef = admin.firestore()
-        .collection('rooms').where("name", "==", name);
-    const uidRef = nameRef.where("creator_uid", "==", uid);
-    const passwordRef = uidRef.where("password", "==", password);
+    const roomRef = admin.firestore()
+        .collection('rooms').doc(id)
 
-    passwordRef.get().then((doc) => {
-        const rooms = doc.docs.map((docx) => { return docx.id })
-        // ref to room_members list in requested room
-        const room_members = admin.firestore().collection('rooms').doc(rooms[0]).collection('room_members');
-        const is_member = room_members.where("user_uid", "==", uid);
+    roomRef.get().then((doc) => {
+        if (doc.data().password == password) {
 
-        is_member.get().then((member) => {
-            //pass (found user)
-        }).catch(err => {
-            // not found member in member list so add him
-            room_members.add({
-                user_uid: uid,
-            })
-        })
-        // Success status
-        res.status(200).end();
+            // ref to room_members list in requested room
+            const room_members = admin.firestore().collection('room_members');
+            const is_member = room_members.where("user_uid", "==", uid).where("room_id", "==", id);
+
+            is_member.get().then((docs) => {
+                if (docs.docs.length == 0) {
+                    room_members.add({
+                        user_uid: uid,
+                        room_id: id,
+                    }).then(() => {
+                        res.status(200).end();
+                    })
+                }
+            }).catch(err => {
+                // user already in members
+            });
+            // Success status
+        }
+        else {
+            // wrong password
+            res.status(400).end();
+        }
+
     }).catch(err => {
-        // not found resurces (wrong password)
-        res.status(400).end();
+        // not found room
+        res.status(404).end();
     });
 });
 
 /* Example request for that function
 
-curl -X POST https://us-central1-test-36302.cloudfunctions.net/test
+curl -X POST https://us-central1-test-36302.cloudfunctions.net/passwordCheck
    -H 'Content-Type: application/json'
-   -d '{"name":"xxxa","uid": "B2Xidd3Vw1PL9Kyt5ERFXCjniuF3",
+   -d '{"uid": "B2Xidd3Vw1PL9Kyt5ERFXCjniuF3","id":"Sjucgsyuw2723"
     "password": "xxxx"}'
 
 */
 
 
-exports.rooms = functions.https.onRequest((req, res) => {
-    const { uid, name, password } = req.body;
+exports.rooms = functions.region("europe-central2").https.onRequest((req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
 
-    // refs to room with given args
-    const nameRef = admin.firestore()
-        .collection('rooms').where("creator_uid", "==", uid);
+    const { uid } = req.body;
 
-    nameRef.get().then((doc) => {
+    // refs to rooms members list objects with given user id
+    const membersRef = admin.firestore()
+        .collection('room_members').where("user_uid", "==", uid);
+
+    membersRef.get().then((doc) => {
         if (doc) {
-            const rooms = doc.docs.map((docx) => { return docx.data() });
-            res.json(rooms);
-            // Success status
-            res.status(200).end();
+            // get all ids of rooms that user is in
+            const rooms_ids = doc.docs.map((docx) => { return docx.data().room_id });
+
+            // get all datas from that rooms
+            const roomsrefs = rooms_ids.map(id => admin.firestore().collection("rooms").doc(id));
+            admin.firestore().getAll(...roomsrefs).then((rooms) => {
+                res.json(rooms.map(room =>
+                    Object.assign({}, { "id": room.id }, room.data())))
+                res.status(200).end();
+            })
         }
         else {
-            // not found resurces (wrong password)
+            // not found resurces
             res.json([]);
-            res.status(400).end();
+            res.status(401).end();
         }
     }).catch(err => {
         //Internal server error
         res.status(500).end();
     });
+
 });
 
 /* Example request for that function
 
-curl -X POST https://us-central1-test-36302.cloudfunctions.net/test
+curl -X POST https://us-central1-test-36302.cloudfunctions.net/rooms
    -H 'Content-Type: application/json'
-   -d '{"name":"xxxa","uid": "B2Xidd3Vw1PL9Kyt5ERFXCjniuF3",
-    "password": "xxxx"}'
+   -d '{"uid": "B2Xidd3Vw1PL9Kyt5ERFXCjniuF3"}'
 
-*/
+// */
