@@ -1,0 +1,29 @@
+do dodania:
+-video chat XD
+-video chat bez pokoi
+-wyjdz z video chatu
+-wyrzuc kogos z video chatu
+-zmutuj
+-wylacz kamerke
+-udostepnij ekran
+-chat z i bez video chatu
+-przycisk na emotki xD
+-przebuduj ui
+-animacje duzo animacji
+-zapros do pokoju bez hasla
+-zmien nazwe pokoju
+-usun pokoj
+-zdjecie pokoju
+-wiecej info uzytkownikow
+-ciemny motyw
+-czy zapamietywac cookies
+-substronki about itd
+-wysylanie zdjec filmikow
+
+electron cala apka XD
+-polacz z lokalnym reactem
+-zrob to zeby sie nie dalo otwierac devtools
+-nie zmieniac stron
+-wyglad
+-ikona
+-to w dolnym z strzalka

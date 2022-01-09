@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react"
-import { auth } from "./firebaseSetup"
+import { auth } from "../firebaseSetup"
 import {
     onAuthStateChanged, signOut,
     signInWithEmailAndPassword, createUserWithEmailAndPassword,
@@ -10,7 +10,7 @@ import {
 
 } from "firebase/auth";
 import { collection, getDocs, getDoc, query, where, addDoc } from "firebase/firestore";
-import { db } from "./firebaseSetup";
+import { db } from "../firebaseSetup";
 import fetch from 'node-fetch';
 
 const googleProvider = new GoogleAuthProvider();
@@ -83,7 +83,11 @@ export function AuthProvider({ children }) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ "uid": uid })
-        }).then(response => response.json())
+        }).then(response => {
+            return response.json().catch(err => {
+                return [];
+            });
+        })
             .then(data => { rooms = data });;
         return rooms;
     }
@@ -129,3 +133,5 @@ export function AuthProvider({ children }) {
         </AuthContext.Provider>
     )
 }
+
+export default AuthProvider;

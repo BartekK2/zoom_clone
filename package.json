@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Clone of zoom app made using next.js, firebase, electron.js, peer.js, socket.io, mui ( node.js )",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BartekK2/zoom_clone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BartekK2/zoom_clone/issues"
+  },
+  "homepage": "https://github.com/BartekK2/zoom_clone#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "socket.io": "^4.4.1"
+  }
+}

@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import { useAuth } from './AuthContext'
 
 
-function sign() {
+function Sign() {
     // getting form mode from url
     const [mode, setmode] = useState("login");
     const router = useRouter()
@@ -166,4 +166,4 @@ function sign() {
     )
 }
 
-export default sign
+export default Sign

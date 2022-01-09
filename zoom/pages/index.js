@@ -62,7 +62,7 @@ function Main() {
             Zoom like video call app. Made just for fun and portfolio, try it if u want but i dont recommend to use it as a replacement for apps like teams or sth.
           </h4>
 
-          <Link href="/dashboard">
+          <Link href="/dashboard" passHref={true}>
             <HoverArea>
 
               <Button color="primary" variant="contained" style={{

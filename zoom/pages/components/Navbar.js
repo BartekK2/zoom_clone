@@ -35,24 +35,24 @@ function Navbar() {
             {
                 isPhone ?
                     <>
-                        <Link href={'/about'} passHref>
-                            <a href="" style={{ textDecoration: "none", color: "black" }}>About</a>
+                        <Link href={'/about'} >
+                            <a style={{ textDecoration: "none", color: "black" }}>About</a>
                         </Link>
-                        <Link href={'/contact'} passHref>
-                            <a href="" style={{ textDecoration: "none", color: "black" }}>Contact</a>
+                        <Link href={'/contact'}>
+                            <a style={{ textDecoration: "none", color: "black" }}>Contact</a>
                         </Link>
-                        <Link href={'/support'} passHref>
-                            <a href="" style={{ textDecoration: "none", color: "black" }}>Support</a>
+                        <Link href={'/support'}>
+                            <a style={{ textDecoration: "none", color: "black" }}>Support</a>
                         </Link>
                     </> :
                     <ButtonGroup variant="contained" >
-                        <Link href={'/about'}>
+                        <Link href={'/about'} passHref={true}>
                             <Button onClick={() => { console.log("XD") }}><InfoIcon /></Button>
                         </Link>
-                        <Link href={'/contact'}>
+                        <Link href={'/contact'} passHref={true}>
                             <Button><ContactPhoneIcon /></Button>
                         </Link>
-                        <Link href={'/support'}>
+                        <Link href={'/support'} passHref={true}>
                             <Button><VolunteerActivismIcon /></Button>
                         </Link>
                     </ButtonGroup>

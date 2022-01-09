@@ -4,7 +4,7 @@ import { Button, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import { useRouter } from "next/router"
 import RoomTab from './components/RoomTab';
 
-function dashboard() {
+function Dashboard() {
     const { currentUser, getRooms, addRoom } = useAuth();
     const [loading, setloading] = useState(false);
     const [roomsLoading, setroomsLoading] = useState(true)
@@ -17,8 +17,8 @@ function dashboard() {
 
     const updateRooms = async () => {
         setroomsLoading(true);
-        setrooms(await getRooms(currentUser.uid));
-        console.log(rooms)
+        if (currentUser)
+            setrooms(await getRooms(currentUser.uid));
         setroomsLoading(false);
     }
 
@@ -37,8 +37,11 @@ function dashboard() {
         }
     }, [currentUser])
 
-    useEffect(async () => {
-        await updateRooms();
+    useEffect(() => {
+        async function update() {
+            await updateRooms();
+        }
+        update();
     }, [])
 
     return (
@@ -53,14 +56,17 @@ function dashboard() {
                         {roomsLoading ?
                             <p style={{ textAlign: "center" }}>Ładowanie</p>
                             :
-                            rooms.map((element, id) => {
-                                return (<RoomTab props={element} id={id}>{element.name}</RoomTab>)
-                            })
+                            rooms.length == 0 ?
+                                <p>pustoo</p>
+                                :
+                                rooms.map((element, id) => {
+                                    return (<RoomTab props={element} key={id}>{element.name}</RoomTab>)
+                                })
                         }
                     </div>
 
                     {/* create room*/}
-                    <div style={{ width: "-webkit-fill-available", display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: "100%", display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', justifyContent: 'center' }}>
                         <TextField required label="Name" onChange={(e) => setname(e.target.value)} />
                         {secured && <TextField required label="Password" onChange={(e) => setpassword(e.target.value)} />}
                         <FormControlLabel
@@ -85,7 +91,7 @@ function dashboard() {
 
                         funkcja ktora sprawdza czy uzytkownik jest w pokoju i zwraca mu hash jesli istnieje
 
-                        kiedy sie wszyscy rozlacza hash=""
+                        kiedy sie wszyscy rozlacza hash=null
                     </div>
 
                 </div>
@@ -94,4 +100,4 @@ function dashboard() {
     )
 }
 
-export default dashboard
+export default Dashboard
