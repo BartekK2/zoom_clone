@@ -3,7 +3,7 @@ import { useAuth } from './AuthContext'
 import { Button, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import { useRouter } from "next/router"
 import RoomTab from './components/RoomTab';
-
+import Room from './components/Room';
 function Dashboard() {
     const { currentUser, getRooms, addRoom } = useAuth();
     const [loading, setloading] = useState(false);
@@ -46,6 +46,7 @@ function Dashboard() {
 
     return (
         <>
+            <Room />
             {loading &&
 
                 <div style={{ display: 'flex', flex: '1 1 auto' }}> {/*borderTop: "solid 5px black"  */}

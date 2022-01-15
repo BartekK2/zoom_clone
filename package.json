@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/BartekK2/zoom_clone#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.2",
     "socket.io": "^4.4.1"
   }

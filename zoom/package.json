@@ -1,6 +1,7 @@
 {
   "name": "zoom",
   "private": true,
+  "proxy": "http://localhost:8000",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -19,7 +20,10 @@
     "firebase-admin": "^10.0.1",
     "next": "12.0.7",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "simple-peer": "^9.11.0",
+    "socket.io-client": "^4.4.1",
+    "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "eslint": "8.6.0",
