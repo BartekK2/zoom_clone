@@ -65,16 +65,6 @@ export function AuthProvider({ children }) {
 
     const roomsRef = collection(db, "rooms");
 
-    async function passwordCheck(uid, id, password) {
-        await fetch('https://europe-central2-test-36302.cloudfunctions.net/passwordCheck', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "uid": uid, "id": id, "password": password })
-        })
-    }
-
     async function getRooms(uid) {
         let rooms;
         await fetch('https://europe-central2-test-36302.cloudfunctions.net/rooms', {
@@ -91,13 +81,30 @@ export function AuthProvider({ children }) {
             .then(data => { rooms = data });;
         return rooms;
     }
-    async function addRoom(uid, _name, is_secured, pass) {
-        await addDoc(collection(db, "rooms"), {
-            creator_uid: uid,
-            name: _name,
-            secured: is_secured,
-            password: pass,
-        }).then(async (doc) => await passwordCheck(uid, doc.id, pass));
+
+
+    async function addRoom(uid, _name, pass) {
+        await fetch('https://europe-central2-test-36302.cloudfunctions.net/addRoom', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "uid": uid, "name": _name, "password": pass })
+        }).then(response => {
+            return response.status;
+        })
+    }
+
+    async function joinRoom(uid, name, pass) {
+        await fetch('https://europe-central2-test-36302.cloudfunctions.net/joinroom', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "uid": uid, "name": name, "password": pass })
+        }).then(response => {
+            return response.status;
+        })
     }
 
     useEffect(() => {
@@ -118,6 +125,7 @@ export function AuthProvider({ children }) {
         signup,
         logout,
         getRooms,
+        joinRoom,
         addRoom,
         setAuthPersistence,
         getPersistence,

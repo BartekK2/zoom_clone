@@ -4,27 +4,22 @@ const cors = require('cors')({ origin: true });
 
 admin.initializeApp(functions.config().firebase);
 
-exports.joinroom = functions.region("europe-central2").https.onRequest((req, res) => {
+exports.passwordCheck = functions.region("europe-central2").https.onRequest((req, res) => {
     cors(req, res, () => {
-        const { uid, password, name } = req.body;
+        const { uid, password, id } = req.body;
 
         // refs to room with given args
         const roomRef = admin.firestore()
-            .collection('rooms').where("name", "==", name)
+            .collection('rooms').doc(id)
 
-        roomRef.get().then((data) => {
-
-            // because there could be only one document with same name
-            const thatRoom = data.docs[0];
-            if (thatRoom.data().password == password) {
-                const id = thatRoom.id;
+        roomRef.get().then((doc) => {
+            if (doc.data().password == password) {
 
                 // ref to room_members list in requested room
                 const room_members = admin.firestore().collection('room_members');
                 const is_member = room_members.where("user_uid", "==", uid).where("room_id", "==", id);
 
                 is_member.get().then((docs) => {
-                    // if already is one of the user dont add him second time
                     if (docs.docs.length == 0) {
                         room_members.add({
                             user_uid: uid,
@@ -104,27 +99,22 @@ curl -X POST https://europe-central2-test-36302.cloudfunctions.net/rooms
 
 exports.addRoom = functions.region("europe-central2").https.onRequest((req, res) => {
 
-    const { name, uid, password } = req.body;
+    const { name, uid, password, secured } = req.body;
 
     cors(req, res, () => {
         const roomsRef = admin.firestore().collection("rooms");
         const roomref = admin.firestore().collection("rooms").where("name", "==", name);
 
         roomref.get().then((docs) => {
-            // there could be only one document with given name
             if (docs.size === 0) {
                 roomsRef.add({
                     "name": name,
                     "creator_uid": uid,
                     "password": password,
+                    "secured": secured,
                 }).then((doc) => {
-                    const room_members = admin.firestore().collection('room_members');
-                    room_members.add({
-                        user_uid: uid,
-                        room_id: doc.id,
-                    }).then(() => {
-                        res.status(200).end();
-                    })
+                    res.json({ "id": doc.id });
+                    res.status(200).end();
                 })
             }
             else {

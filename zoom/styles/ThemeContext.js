@@ -11,6 +11,13 @@ const theme = createTheme({
         },
     },
     components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+
+                }
+            }
+        },
         MuiChip: {
             styleOverrides: {
                 root: {

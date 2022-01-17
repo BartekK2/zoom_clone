@@ -8,7 +8,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: ["http://localhost:3000", "http://192.168.0.124:3000"],
     }
 })
 
@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", () => {
         console.log("uzytkownik sie rozlaczyl", socket.id);
-        socket.broadcast.to(socket.room).emit("user disconnected", { "id": socket.id });
+        socket.to(socket.room).emit("user disconnected", { "id": socket.id });
         // io.in(socket.room).allSockets().then(users => {
         //     let usersArray = Array.from(users);
         //     socket.to(socket.room).emit("all users", { "users": usersArray })
@@ -44,7 +44,4 @@ io.on("connection", (socket) => {
         io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
     });
 })
-
-server.listen(3001, () => {
-    console.log("server dziala");
-})
+server.listen(3001, "0.0.0.0");
