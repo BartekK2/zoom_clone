@@ -110,16 +110,6 @@ function Dashboard() {
                                 await updateRooms();
                             }}>Add +</Button>
                             {addloading && <p>Ładowanie</p>}
-
-                            funkcja ktora sprawdza czy hasla sa ok i przypisuje uzytkownika do roomu
-
-                            funkcja ktora pobiera pokoje
-
-                            funkcja ktora generuje jednorazowy hash przy tworzeniu video chatu
-
-                            funkcja ktora sprawdza czy uzytkownik jest w pokoju i zwraca mu hash jesli istnieje
-
-                            kiedy sie wszyscy rozlacza hash=null
                         </div>}
                     {mode === "join_room" &&
                         <JoinRoom />
@@ -134,10 +124,6 @@ function Dashboard() {
                             </div>
 
                             <div style={{ flex: "1", borderBottom: "solid black 1px", borderTop: "solid black 1px" }}>
-                                Chat... skopiuj to co już kiedyś miałeś tym razem z paginacją na scroll
-                                ( Pomysły: // USUWANIE CZATU / EDYCJA - ma to sie dziac tylko na frontendzie nie ma fetchowac po zmianie //
-                                // Socket.io - czat na żywo, nie fetchuj danych jedynie wysyłaj B) //
-                                )
                                 <Videos id={room.id} />
 
                             </div>

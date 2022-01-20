@@ -1,7 +1,7 @@
 import io from "socket.io-client"
 import Peer from "simple-peer";
 import { useState, useEffect, useRef } from "react";
-
+import { useAuth } from "../AuthContext";
 
 const Video = (props) => {
     const ref = useRef();
@@ -23,21 +23,29 @@ export default function Videos({ id }) {
     const peersRef = useRef([]);
     const userVideo = useRef({ "srcObject": "" });
     const [roomPeers, setroomPeers] = useState([]);
+    const { currentUser } = useAuth();
 
     const [username, setUsername] = useState("")
     const [users, setUsers] = useState([]);
     const [room, setRoom] = useState("")
 
     const joinRoom = () => {
-        console.log(id);
         if (username !== "" && id !== "") {
             socketRef.current.emit("join_room", { "room": id });
         }
     }
+    useEffect(() => {
+        peersRef.current.map((peer) => peer.peer.destroy());
+        peers.map((peer) => peer.peer.destroy());
+
+        setPeers([]);
+        peersRef.current = [];
+    }, [id])
+
+
 
     useEffect(() => {
         socketRef.current = io.connect("http://localhost:3001")
-        console.log("tutaj", id)
         navigator.mediaDevices.getUserMedia({
             video: {
                 height: window.innerHeight / 2,
@@ -48,7 +56,6 @@ export default function Videos({ id }) {
             socketRef.current.on("all users", data => {
 
                 const peers = [];
-                console.log(data.users);
                 data.users.forEach(userID => {
                     if (userID !== socketRef.current.id) {
                         const peer = createPeer(userID, socketRef.current.id, stream);
@@ -68,18 +75,23 @@ export default function Videos({ id }) {
 
             socketRef.current.on("user disconnected", (data) => {
                 const peerObj = peersRef.current.find(p => p.peerID === data.id);
+                console.log(data.id);
+
                 if (peerObj)
                     peerObj.peer.destroy();
 
-                const peers = peersRef.current.filter(p => p.peerID !== data.id);
-                peersRef.current = peers;
-                setPeers(peers);
+                const peers2 = peersRef.current.filter(p => p.peerID !== data.id);
+                peersRef.current.filter(p => p.peerID === data.id).map((peer) => peer.peer.destroy());
+                peersRef.current = peers2;
+
+                setPeers(peers2);
+                console.log("DZIAŁA?", peers);
+
             });
 
             socketRef.current.on("user joined", payload => {
-                console.log(socketRef.current.id, payload.callerID);
                 if (peersRef.current.map(data => data.peerID).includes(payload.callerID)) {
-                    console.log("tried to add same peer")
+                    // console.log("tried to add same peer")
                 } else {
                     const peer = addPeer(payload.signal, payload.callerID, stream);
                     peersRef.current.push({
