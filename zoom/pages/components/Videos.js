@@ -45,7 +45,8 @@ export default function Videos({ id }) {
 
 
     useEffect(() => {
-        socketRef.current = io.connect("http://localhost:3001")
+        socketRef.current = io.connect("https://zoom-clone22.herokuapp.com")
+
         navigator.mediaDevices.getUserMedia({
             video: {
                 height: window.innerHeight / 2,
