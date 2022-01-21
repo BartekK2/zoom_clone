@@ -8,7 +8,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: ["http://localhost:3000", "http://192.168.0.124:3000", "https://zoom-clone22.herokuapp.com"],
+        origin: ["http://localhost:3000", "http://192.168.0.124:3000", "https://zoom-clone22.herokuapp.com", "https://zoom-clone2-5hwucw2jy-bartekk2.vercel.app"],
     }
 })
 
